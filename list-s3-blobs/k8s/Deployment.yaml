@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: list-s3-blobs
+spec:
+  selector:
+    matchLabels:
+      app: list-s3-blobs
+  template:
+    metadata:
+      labels:
+        app: list-s3-blobs
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: list-s3-blobs
+          image: pabloborh/list-s3-blobs:v1.0
+          imagePullPolicy: Always 
+          env:
+            - name: AWS_BUCKET
+              value: list-s3-blobs
+            - name: AWS_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: aws-ak-sk
+                  key: aws_access_key_id
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: aws-ak-sk
+                  key: aws_secret_access_key
+          resources:
+            limits:
+              cpu: 500m
+              memory: 128Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+
+
+
+
+
